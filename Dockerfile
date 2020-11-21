@@ -1,5 +1,9 @@
 FROM ubuntu:latest
 
+# Added to avoid problematic debconf prompts during builds
+# See https://github.com/moby/moby/issues/27988#issuecomment-462809153
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
 RUN apt -y update
 RUN apt -y install apache2
 RUN a2enmod proxy
