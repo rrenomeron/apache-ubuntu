@@ -28,6 +28,12 @@ RUN mkdir /etc/apache2/local/certs
 COPY 999-local-sites.conf /etc/apache2/sites-available
 RUN a2ensite 999-local-sites
 
+# Make our logs go to stdout, see
+# https://serverfault.com/questions/711168/writing-apache2-logs-to-stdout-stderr
+
+RUN ln -sf /proc/self/fd/1 /var/log/apache2/access.log
+RUN ln -sf /proc/self/fd/1 /var/log/apache2/error.log
+
 # The usual running as a service won't work.
 # Ref: http://www.inanzzz.com/index.php/post/rhsb/running-apache-server-as-foreground-on-ubuntu-with-dockerfile
 CMD [ "/usr/sbin/apache2ctl","-DFOREGROUND"]
